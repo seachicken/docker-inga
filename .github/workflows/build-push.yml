@@ -2,7 +2,7 @@ name: Build and push a Docker image
 
 on:
   push:
-    tags: [ 'v*.*.*' ]
+    tags: [ '*' ]
   pull_request:
     branches: [ main ]
 
