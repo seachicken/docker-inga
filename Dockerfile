@@ -17,3 +17,5 @@ RUN set -eux; \
 
 RUN ros install seachicken/inga
 
+ENTRYPOINT ["inga"]
+
