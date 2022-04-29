@@ -6,6 +6,12 @@ RUN set -eux; \
   curl -fsSL https://deb.nodesource.com/setup_14.x | bash -; \
   apt-get install -y nodejs
 
+#RUN set -eux; \
+#  curl -o ./inga.tar.gz \
+#    -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.0.tar.gz; \
+#  mkdir inga; \
+#  tar xvf ./inga.tar.gz -C inga --strip-components 1
+
 RUN npm install -g typescript
 RUN set -eux; \
   curl -o ./tsparser.tar.gz \
@@ -17,5 +23,6 @@ RUN set -eux; \
 
 RUN ros install seachicken/inga
 
+#ENTRYPOINT ["inga/roswell/inga.ros"]
 ENTRYPOINT ["inga"]
 
