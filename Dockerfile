@@ -29,6 +29,6 @@ RUN set -eux; \
 
 RUN (cd ~/.roswell/local-projects && ln -s /inga inga)
 
-ENTRYPOINT ["inga/roswell/inga.ros"]
+ENTRYPOINT ["/inga/roswell/inga.ros"]
 #ENTRYPOINT ["inga"]
 
