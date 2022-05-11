@@ -12,7 +12,7 @@ RUN set -eux; \
 
 RUN set -eux; \
   curl -o ./inga.tar.gz \
-    -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.1.tar.gz; \
+    -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.2-pre.tar.gz; \
   mkdir inga; \
   tar xvf ./inga.tar.gz -C inga --strip-components 1
 
