@@ -5,7 +5,7 @@ RUN ros
 
 RUN set -eux; \
   apt-get update; \
-  apt-get install -y curl git chromium; \
+  apt-get install -y curl git chromium-browser; \
   apt-get install -y vim; \
   curl -fsSL https://deb.nodesource.com/setup_14.x | bash -; \
   apt-get install -y nodejs
