@@ -1,5 +1,7 @@
 FROM fukamachi/roswell:21.10.14.111-ubuntu
 
+ENV GH_VERSION 2.12.1
+
 # install dependencies
 RUN ros
 
@@ -11,10 +13,7 @@ RUN set -eux; \
   DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 
 RUN set -eux; \
-  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg; \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-  sudo apt update; \
-  sudo apt install gh
+  curl -L https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.deb -o gh_${GH_VERSION}_linux_amd64.deb && sudo dpkg -i gh_${GH_VERSION}_linux_amd64.deb && rm gh_${GH_VERSION}_linux_amd64.deb
 
 RUN set -eux; \
   curl -o ./inga.tar.gz \
