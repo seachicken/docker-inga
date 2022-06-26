@@ -23,7 +23,7 @@ RUN set -eux && \
   (cd tsparser && npm ci && npm run build) && \
   npm install -g ./tsparser
 
-RUN ros install seachicken/inga
+RUN ros install seachicken/inga/v0.1.3-pre
 
 ENTRYPOINT ["inga"]
 
