@@ -37,7 +37,11 @@ RUN set -eux && \
 RUN set -eux && \
   curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/releases/download/javaparser-0.1.0/javaparser-0.1.0.jar
 
-RUN ros install seachicken/inga/v0.1.4
+ENV PATH /libs/jdtls/bin:$PATH
+
+ENV CLASSPATH /libs/javaparser.jar:$CLASSPATH
+
+RUN ros install seachicken/inga/v0.1.5
 
 ENTRYPOINT ["inga"]
 
