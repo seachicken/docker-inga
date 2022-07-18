@@ -41,5 +41,7 @@ ENV INGA_HOME /
 
 RUN ros install seachicken/inga/v0.1.6
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y vim
+
 ENTRYPOINT ["inga"]
 
