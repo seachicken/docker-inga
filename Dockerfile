@@ -39,7 +39,7 @@ RUN set -eux && \
 
 ENV INGA_HOME /
 
-RUN ros install seachicken/inga/v0.1.6
+RUN ros install seachicken/inga/v0.1.7
 
 ENTRYPOINT ["inga"]
 
