@@ -34,12 +34,13 @@ RUN set -eux && \
   mkdir libs/jdtls && \
   tar xvf ./jdtls.tar.gz -C ./libs/jdtls
 
-RUN set -eux && \
-  curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/releases/download/javaparser-0.1.0/javaparser-0.1.0.jar
+RUN curl -o ./libs/lombok.jar -L https://projectlombok.org/downloads/lombok.jar
+
+RUN curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/releases/download/javaparser-0.1.0/javaparser-0.1.0.jar
 
 ENV INGA_HOME /
 
-RUN ros install seachicken/inga/v0.1.7
+RUN ros install seachicken/inga/v0.1.8
 
 ENTRYPOINT ["inga"]
 
