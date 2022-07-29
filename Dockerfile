@@ -40,7 +40,7 @@ RUN curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/re
 
 ENV INGA_HOME /
 
-RUN ros install seachicken/inga/v0.1.8
+RUN ros install seachicken/inga/v0.1.10
 
 ENTRYPOINT ["inga"]
 
