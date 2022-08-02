@@ -1,6 +1,6 @@
 FROM fukamachi/roswell:21.10.14.111-ubuntu
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux && \
   apt-get update && \
@@ -25,13 +25,11 @@ RUN set -eux && \
   mkdir libs/jdtls && \
   tar xvf ./jdtls.tar.gz -C ./libs/jdtls
 
-RUN curl -o ./libs/lombok.jar -L https://projectlombok.org/downloads/lombok.jar
-
 RUN curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/releases/download/javaparser-0.1.0/javaparser-0.1.0.jar
 
 ENV INGA_HOME /
 
-RUN ros install seachicken/inga/v0.1.11
+RUN ros install seachicken/inga/v0.1.12-pre0
 
 ENTRYPOINT ["inga"]
 
