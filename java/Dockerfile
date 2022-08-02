@@ -1,8 +1,10 @@
 FROM fukamachi/roswell:21.10.14.111-ubuntu
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN set -eux && \
   apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get install -y curl git
+  apt-get install -y curl git
 
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#installing-gh-on-linux-and-bsd
 RUN set -eux && \
@@ -10,9 +12,9 @@ RUN set -eux && \
   chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
   apt update && \
-  DEBIAN_FRONTEND=noninteractive apt install -y gh && \
-  DEBIAN_FRONTEND=noninteractive apt install -y openjdk-17-jdk && \
-  DEBIAN_FRONTEND=noninteractive apt install -y python3.9
+  apt install -y gh && \
+  apt install -y openjdk-17-jdk && \
+  apt install -y python3.9
 
 RUN (cd /usr/bin && ln -nfs python3.9 python3)
 
