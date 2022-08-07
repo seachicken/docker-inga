@@ -1,22 +1,15 @@
-FROM fukamachi/roswell:21.10.14.111-ubuntu
+FROM fukamachi/roswell:21.10.14.111-ubuntu AS build
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux && \
   apt-get update && \
-  apt-get install -y curl git
+  apt-get install -y curl
 
 # https://github.com/cli/cli/blob/trunk/docs/install_linux.md#installing-gh-on-linux-and-bsd
 RUN set -eux && \
   curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
-  chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
-  apt update && \
-  apt install -y gh && \
-  apt install -y openjdk-17-jdk && \
-  apt install -y python3.9
-
-RUN (cd /usr/bin && ln -nfs python3.9 python3)
+  chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 
 RUN mkdir libs
 
@@ -27,9 +20,36 @@ RUN set -eux && \
 
 RUN curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/releases/download/javaparser-0.1.0/javaparser-0.1.0.jar
 
-ENV INGA_HOME /
+RUN set -eux && \
+  curl -o ./inga.tar.gz -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.12-pre0.tar.gz && \
+  mkdir inga && \
+  tar xvf ./inga.tar.gz -C ./inga --strip-components 1
 
-RUN ros install seachicken/inga/v0.1.12-pre0
+RUN ros
+
+RUN cd ~/.roswell/local-projects && ln -s /inga inga
+
+RUN ros build /inga/roswell/inga.ros
+
+
+FROM ubuntu:22.04
+
+COPY --from=build /usr/share/keyrings/githubcli-archive-keyring.gpg /usr/share/keyrings/githubcli-archive-keyring.gpg
+COPY --from=build /libs /libs
+COPY --from=build /inga/roswell/inga /usr/local/bin/
+
+RUN set -eux && \
+  apt-get update && \
+  apt-get install -y git
+
+# https://github.com/cli/cli/blob/trunk/docs/install_linux.md#installing-gh-on-linux-and-bsd
+RUN set -eux && \
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
+  apt update && \
+  apt install -y gh && \
+  apt install -y openjdk-17-jdk
+
+ENV INGA_HOME /
 
 ENTRYPOINT ["inga"]
 
