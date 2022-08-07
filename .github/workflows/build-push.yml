@@ -17,6 +17,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        target: [typescript, java]
 
     steps:
       - name: Checkout repository
@@ -45,8 +48,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./${{ matrix.target }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}-${{ matrix.target }}
           labels: ${{ steps.meta.outputs.labels }}
 
