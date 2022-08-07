@@ -11,17 +11,18 @@ RUN set -eux && \
   curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
   chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 
-RUN mkdir libs
+RUN mkdir /tmp/inga
 
 RUN set -eux && \
-  curl -o ./jdtls.tar.gz -L https://download.eclipse.org/jdtls/milestones/1.13.0/jdt-language-server-1.13.0-202206301721.tar.gz && \
-  mkdir libs/jdtls && \
-  tar xvf ./jdtls.tar.gz -C ./libs/jdtls
-
-RUN curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/releases/download/javaparser-0.1.0/javaparser-0.1.0.jar
+  curl -o /tmp/inga/setup_node -fsSL https://deb.nodesource.com/setup_14.x
 
 RUN set -eux && \
-  curl -o ./inga.tar.gz -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.12-pre0.tar.gz && \
+  curl -o ./tsparser.tar.gz -L https://github.com/seachicken/tsparser/archive/refs/tags/v0.0.2.tar.gz && \
+  mkdir /tmp/inga/tsparser && \
+  tar xvf ./tsparser.tar.gz -C /tmp/inga/tsparser --strip-components 1
+
+RUN set -eux && \
+  curl -o ./inga.tar.gz -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.11.tar.gz && \
   mkdir inga && \
   tar xvf ./inga.tar.gz -C ./inga --strip-components 1 && \
   ros && \
@@ -32,18 +33,24 @@ RUN set -eux && \
 FROM ubuntu:22.04
 
 COPY --from=build /usr/share/keyrings/githubcli-archive-keyring.gpg /usr/share/keyrings/githubcli-archive-keyring.gpg
-COPY --from=build /libs /libs
+COPY --from=build /tmp/inga /tmp/inga
 COPY --from=build /inga/roswell/inga /usr/local/bin/
 
 RUN set -eux && \
   apt-get update && \
-  apt-get install -y git
+  apt-get install -y git && \
+  bash /tmp/inga/setup_node && apt-get install -y nodejs
 
 RUN set -eux && \
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && \
   apt update && \
-  apt install -y gh && \
-  apt install -y openjdk-17-jdk
+  apt install -y gh
+
+RUN npm install -g typescript
+
+RUN set -eux && \
+  cd /tmp/inga/tsparser && npm ci && npm run build && \
+  npm install -g .
 
 ENV INGA_HOME /
 
