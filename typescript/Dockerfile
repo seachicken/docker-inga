@@ -1,5 +1,6 @@
 FROM fukamachi/roswell:21.10.14.111-ubuntu AS build
 
+ARG VERSION
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux && \
@@ -22,7 +23,7 @@ RUN set -eux && \
   tar xvf ./tsparser.tar.gz -C /tmp/inga/tsparser --strip-components 1
 
 RUN set -eux && \
-  curl -o ./inga.tar.gz -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.11.tar.gz && \
+  curl -o ./inga.tar.gz -L https://github.com/seachicken/inga/archive/refs/tags/v$VERSION.tar.gz && \
   mkdir inga && \
   tar xvf ./inga.tar.gz -C ./inga --strip-components 1 && \
   ros && \

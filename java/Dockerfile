@@ -1,5 +1,6 @@
 FROM fukamachi/roswell:21.10.14.111-ubuntu AS build
 
+ARG VERSION
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN set -eux && \
@@ -20,8 +21,10 @@ RUN set -eux && \
 
 RUN curl -o ./libs/javaparser.jar -L https://github.com/seachicken/javaparser/releases/download/javaparser-0.1.0/javaparser-0.1.0.jar
 
+RUN curl -o ./libs/lombok.jar -L https://projectlombok.org/downloads/lombok.jar
+
 RUN set -eux && \
-  curl -o ./inga.tar.gz -L https://github.com/seachicken/inga/archive/refs/tags/v0.1.12-pre0.tar.gz && \
+  curl -o ./inga.tar.gz -L https://github.com/seachicken/inga/archive/refs/tags/v$VERSION.tar.gz && \
   mkdir inga && \
   tar xvf ./inga.tar.gz -C ./inga --strip-components 1 && \
   ros && \
