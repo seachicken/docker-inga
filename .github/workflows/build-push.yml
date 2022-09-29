@@ -44,10 +44,10 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          flavor: suffix=-${{ matrix.target }},onlatest=true
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=ref,event=tag
+          flavor: |
+            latest=${{ github.ref == format('refs/heads/{0}', 'main') }}
+            suffix=-${{ matrix.target }},onlatest=true
+          tags: type=ref,event=tag
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
