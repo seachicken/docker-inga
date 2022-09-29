@@ -46,10 +46,9 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
             latest=${{ github.ref == format('refs/heads/{0}', 'fix-latest') }}
-            suffix=-${{ matrix.target }},onlatest=true
           tags: |
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'fix-latest') }}
-            type=ref,event=tag
+            type=raw,value=latest-${{ matrix.target }},enable=${{ github.ref == format('refs/heads/{0}', 'fix-latest') }}
+            type=ref,event=tag,suffix=-${{ matrix.target }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
